@@ -11,10 +11,11 @@ class StatsCubit extends Cubit<StatsState>{
   Future<void> fetchStats() async {
     emit(LoadingStatsState());
     try{
-      final response = await _leaderboard.getStats();
-      emit(ResponseStatsState(response));
+      final stats = await _leaderboard.getStats();
+      final leaders = await _leaderboard.getLeaders();
+      emit(ResponseStatsState(stats, leaders));
     }catch(e){
-      emit(ErrorTodoState(e.toString()));
+      emit(ErrorStatsState(e.toString()));
     }
   }
 }

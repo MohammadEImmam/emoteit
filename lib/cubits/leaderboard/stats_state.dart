@@ -6,12 +6,13 @@ class InitStatsState extends StatsState{}
 
 class LoadingStatsState extends StatsState{}
 
-class ErrorTodoState extends StatsState{
+class ErrorStatsState extends StatsState{
   final String message;
-  ErrorTodoState(this.message);
+  ErrorStatsState(this.message);
 }
 
 class ResponseStatsState extends StatsState{
   final Stats stats;
-  ResponseStatsState(this.stats);
+  final List<Leaders> leaders;
+  ResponseStatsState(this.stats, this.leaders);
 }
