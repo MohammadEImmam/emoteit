@@ -11,7 +11,7 @@ class Leaderboard{
      final json = jsonDecode(response.body);
      return Stats.fromJson(json);
     } else {
-      throw Exception('Failed to retrieve stats from server STATUS CODE : ${response.statusCode}');
+      throw Exception('Failed to retrieve stats from server STATUS CODE : ${response.statusCode} ${response.body}');
     }
   }
 

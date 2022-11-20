@@ -4,8 +4,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '/cubits/leaderboard/stats_cubit.dart';
 import 'get/get_leaderboard.dart';
 import 'widgets/login/login_widgets.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'google_signup.dart';
+import 'firebase_options.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    name: 'emoteit',
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const App());
 }
 
@@ -23,6 +31,8 @@ class App extends StatelessWidget {
   }
 }
 
+
+
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
@@ -32,7 +42,6 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   late FocusNode myFocusNode;
-
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late UserCard first;
   late UserCard second;
@@ -52,12 +61,12 @@ class _LoginScreenState extends State<LoginScreen> {
     });
   }
 
-  @override
-  void dispose() {
-    // Clean up the focus node when the Form is disposed
-    myFocusNode.dispose();
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   // Clean up the focus node when the Form is disposed
+  //   myFocusNode.dispose();
+  //   super.dispose();
+  // }
 
   // TODO: Set the bloc builder to the specific element rather than the whole screen
   @override
@@ -215,6 +224,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 onTap: () {
                                   if (kDebugMode) {
                                     print("pressed");
+                                    signup(context);
                                   }
                                 },
                                 child: Container(

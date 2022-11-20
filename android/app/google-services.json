@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "585032225881",
+    "project_id": "emoteit-96e60",
+    "storage_bucket": "emoteit-96e60.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:585032225881:android:87ac40a38e65904e5f4d48",
+        "android_client_info": {
+          "package_name": "com.emoteit.emoteit"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "585032225881-hsgr4b0n3j4c7njscpluo3p89s7gegj1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAx_nD8jBTapA7WpmHs2znSawCGxiYGGIQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "585032225881-hsgr4b0n3j4c7njscpluo3p89s7gegj1.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "585032225881-f47fv3jmrf4j5vhb1t14tuibj25ar30u.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.emoteit.emoteit"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>585032225881-f47fv3jmrf4j5vhb1t14tuibj25ar30u.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.585032225881-f47fv3jmrf4j5vhb1t14tuibj25ar30u</string>
+	<key>API_KEY</key>
+	<string>AIzaSyCeWg69S1tVJh4olRaBlYS_A-dDYa7HD84</string>
+	<key>GCM_SENDER_ID</key>
+	<string>585032225881</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.emoteit.emoteit</string>
+	<key>PROJECT_ID</key>
+	<string>emoteit-96e60</string>
+	<key>STORAGE_BUCKET</key>
+	<string>emoteit-96e60.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:585032225881:ios:45e225523d1af3e25f4d48</string>
+</dict>
+</plist>
