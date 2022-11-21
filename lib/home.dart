@@ -1,5 +1,8 @@
+import 'package:emoteit/cubits/emortion/emortion_cubit.dart';
+import 'package:emoteit/cubits/leaderboard/stats_cubit.dart';
 import 'package:emoteit/models/emoteit_user_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'gen/assets.gen.dart';
@@ -15,9 +18,19 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      final cubit = context.read<EmortionCubit>();
+      print("Fetching emortion");
+      cubit.fetchEmortion();
+    });
+  }
+  @override
   Widget build(BuildContext context) {
     Size size = const Size(390, 844);
-    return Scaffold(
+    return
+      Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
@@ -64,7 +77,7 @@ class _HomePageState extends State<HomePage> {
                       onTap: () {
                         context.pop();
                       },
-                      child:               Container(
+                      child:Container(
                         width: 50,
                         height: 50,
                         decoration: BoxDecoration(
@@ -137,8 +150,22 @@ class _HomePageState extends State<HomePage> {
                   return const SizedBox(height: 20);
                 },
                 itemBuilder: (context, index) {
-                  return GoalCard(
-                    goalNumber: index + 1,
+                  return
+                   BlocBuilder<EmortionCubit, EmortionState>(
+                    builder:(context,state) {
+                      if (state is EmortionInitial || state is LoadingEmortionState) {
+                        return const Center(
+                          child: CircularProgressIndicator(),);
+                      } else if (state is ResponseEmortionState) {
+                        return EmortionCard(
+                          goalNumber: index + 1,
+                          secret: state.emortion[index].secret,
+                        );
+                      } else if (state is ErrorEmortionState) {
+                        return Center(child: Text(state.message),);
+                      }
+                      return Center(child: Text(state.toString()));
+                    }
                   );
                 },
               ),
@@ -188,12 +215,12 @@ class _HomePageState extends State<HomePage> {
 
 
 
-class GoalCard extends StatelessWidget {
+class EmortionCard extends StatelessWidget {
   final int goalNumber;
-
-  const GoalCard({
+  final String secret;
+  const EmortionCard({
     Key? key,
-    required this.goalNumber,
+    required this.goalNumber, required this.secret,
   }) : super(key: key);
 
   @override
@@ -259,7 +286,7 @@ class GoalCard extends StatelessWidget {
                   ),
                   const SizedBox(width: 10),
                   Text(
-                    '20% completed',
+                    secret,
                     style: TextStyle(
                       fontSize: 10,
                       fontFamily: GoogleFonts.workSans().fontFamily,

@@ -19,19 +19,20 @@ void main() async {
 
 class App extends StatelessWidget {
   const App({Key? key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => StatsCubit(Leaderboard()),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<StatsCubit>(
+          create: (context) => StatsCubit(Leaderboard()),
+        ),
+      ],
       child: const MaterialApp(
         home: LoginScreen(),
       ),
     );
   }
 }
-
-
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -62,6 +63,7 @@ class _LoginScreenState extends State<LoginScreen> {
   // }
 
   // TODO: Set the bloc builder to the specific element rather than the whole screen
+  // Entire page now loads due to the bloc builder position... fix for constant UI
   @override
   Widget build(BuildContext context) {
     return Scaffold(
