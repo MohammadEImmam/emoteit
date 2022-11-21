@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-class UserCard{
-  String name;
-  String pictureURL;
-  String score;
-  int answerTime;
-  UserCard(this.name, this.pictureURL, this.score, this.answerTime): super();
-  createUserCard(name, pictureURL, score, answerTime){
+class LeaderCard extends StatelessWidget {
+  final String name;
+  final String pictureURL;
+  final int score;
+  final int answerTime;
+  const LeaderCard(this.name, this.pictureURL, this.score, this.answerTime, {super.key});
+  @override
+  Widget build(BuildContext context){
     return Card(
       child:
       SizedBox(
@@ -37,13 +38,14 @@ class UserCard{
   }
 }
 
-class Bubble{
-  late Color color;
-  late int count;
-  late String text;
-  late IconData icon;
-  Bubble(this.color, this.count, this.text, this.icon);
-  createBubble(count, context){
+class Bubble extends StatelessWidget {
+  final Color color;
+  final int count;
+  final String text;
+  final IconData icon;
+  const Bubble(this.color, this.count, this.text, this.icon, {super.key});
+  @override
+  Widget build(BuildContext context){
     return Expanded(
         child: Column(children: <Widget>[
           Container(

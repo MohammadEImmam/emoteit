@@ -43,13 +43,6 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   late FocusNode myFocusNode;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  late UserCard first;
-  late UserCard second;
-  late UserCard third;
-  late Bubble emortionsCount;
-  late Bubble insightsCount;
-  late Bubble userCount;
-  late Bubble friendsCount;
 
   @override
   void initState() {
@@ -71,13 +64,6 @@ class _LoginScreenState extends State<LoginScreen> {
   // TODO: Set the bloc builder to the specific element rather than the whole screen
   @override
   Widget build(BuildContext context) {
-    first = UserCard("Loading", "Loading", "Loading", 0);
-    second = UserCard("Loading", "Loading", "Loading", 0);
-    third = UserCard("Loading", "Loading", "Loading", 0);
-    emortionsCount = Bubble(Colors.blue[300]!, 0, "Emortions", Icons.emoji_emotions);
-    insightsCount = Bubble(Colors.green[400]!, 0, "Insights", Icons.question_answer);
-    userCount = Bubble(Colors.red[300]!, 0, "New Emorters", Icons.person);
-    friendsCount = Bubble(Colors.yellow[800]!, 0, "Friendships", Icons.people);
     return Scaffold(
         backgroundColor: Colors.white,
         resizeToAvoidBottomInset: false,
@@ -259,10 +245,10 @@ class _LoginScreenState extends State<LoginScreen> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceAround,
                                 children:<Widget> [
-                                  emortionsCount.createBubble(state.stats.emortionCount, context),
-                                  insightsCount.createBubble(state.stats.insightCount, context),
-                                  userCount.createBubble(state.stats.newUserCount,context),
-                                  friendsCount.createBubble(state.stats.newRelationshipCount, context),
+                                  Bubble(Colors.blue[300]!, 0, "Emortions", Icons.emoji_emotions),
+                                  Bubble(Colors.green[400]!, 0, "Insights", Icons.question_answer),
+                                  Bubble(Colors.red[300]!, 0, "New Emorters", Icons.person),
+                                  Bubble(Colors.yellow[800]!, 0, "Friendships", Icons.people),
                                 ],
                               ),
                             ]), // column widget ends here
@@ -309,13 +295,13 @@ class _LoginScreenState extends State<LoginScreen> {
                                   ),
                                 )),
                             Center(
-                              child: first.createUserCard(state.leaders[0].name, state.leaders[0].pictureURL, state.leaders[0].score,state.leaders[0].answerTime),
+                              child: LeaderCard(state.leaders[0].name, state.leaders[0].pictureURL, state.leaders[0].score,state.leaders[0].answerTime),
                             ),
                             Center(
-                              child: second.createUserCard(state.leaders[1].name, state.leaders[1].pictureURL, state.leaders[1].score,state.leaders[1].answerTime),
+                              child: LeaderCard(state.leaders[1].name, state.leaders[1].pictureURL, state.leaders[1].score,state.leaders[1].answerTime),
                             ),
                             Center(
-                              child: third.createUserCard(state.leaders[2].name, state.leaders[2].pictureURL, state.leaders[2].score,state.leaders[2].answerTime),
+                              child: LeaderCard(state.leaders[2].name, state.leaders[2].pictureURL, state.leaders[2].score,state.leaders[2].answerTime),
                             )
                           ],
                         ),
