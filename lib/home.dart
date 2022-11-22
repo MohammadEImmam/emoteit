@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:emoteit/cubits/emortion/emortion_cubit.dart';
 import 'package:emoteit/cubits/leaderboard/stats_cubit.dart';
 import 'package:emoteit/models/emoteit_user_model.dart';
@@ -158,8 +160,11 @@ class _HomePageState extends State<HomePage> {
                           child: CircularProgressIndicator(),);
                       } else if (state is ResponseEmortionState) {
                         return EmortionCard(
-                          goalNumber: index + 1,
                           secret: state.emortion[index].secret,
+                          category: state.emortion[index].categoryID.toString(),//NEED TO TRANSLATE
+                          emojis: state.emortion[index].emojis,
+                          creator: state.emortion[index].user,
+                          expiresAt: state.emortion[index].expiresAt
                         );
                       } else if (state is ErrorEmortionState) {
                         return Center(child: Text(state.message),);
@@ -216,15 +221,24 @@ class _HomePageState extends State<HomePage> {
 
 
 class EmortionCard extends StatelessWidget {
-  final int goalNumber;
   final String secret;
+  final String category;
+  final List<String> emojis;
+  final EmoteItUser creator;
+  final String expiresAt;
   const EmortionCard({
     Key? key,
-    required this.goalNumber, required this.secret,
+    required this.secret, required this.category, required this.emojis, required this.creator, required this.expiresAt,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    bool isExpired = false;
+    final now = DateTime.now().toUtc();
+    final expirationDate = DateTime.parse(expiresAt);
+    if(expirationDate.isAfter(now)){
+      isExpired = true;
+    }
     return Container(
       width: 100,
       // height: 100,
@@ -245,7 +259,8 @@ class EmortionCard extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          const CircleAvatar(
+           CircleAvatar(
+            backgroundImage: NetworkImage(creator.pictureUrl),
             radius: 30,
             backgroundColor: Colors.grey,
           ),
@@ -254,9 +269,9 @@ class EmortionCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Goals #$goalNumber',
+                creator.name,
                 style: TextStyle(
-                  fontSize: 20,
+                  fontSize: 15,
                   fontWeight: FontWeight.w500,
                   fontFamily: GoogleFonts.workSans().fontFamily,
                 ),
@@ -264,29 +279,12 @@ class EmortionCard extends StatelessWidget {
               const SizedBox(height: 10),
               Row(
                 children: [
-                  Container(
-                    height: 5,
-                    width: 100,
-                    decoration: BoxDecoration(
-                      color: Colors.grey,
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                    child: Row(
-                      children: [
-                        Container(
-                          height: 5,
-                          width: 20,
-                          decoration: BoxDecoration(
-                            color: Colors.black,
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                        ),
-                      ],
-                    ),
+                  Row(
+
                   ),
                   const SizedBox(width: 10),
                   Text(
-                    secret,
+                    isExpired ? 'Active' : 'Expired',
                     style: TextStyle(
                       fontSize: 10,
                       fontFamily: GoogleFonts.workSans().fontFamily,
