@@ -46,20 +46,4 @@ class Leaders{
     required this.createdAt,
     required this.updatedAt,
   });
-
-  factory Leaders.fromJson(Map<String, dynamic> json) {
-    return Leaders(
-      id: json['_id'],
-      name: json['name'],
-      answerTime: json['totalAnswerTimeMs'],
-      email: json['email'],
-      time: json['DOB'],
-      score: json['score'],
-      typeID: json['typeId'],
-      pictureURL: json['pictureUrl'],
-      uID: json['uid'],
-      createdAt: json['createdAt'],
-      updatedAt: json['updatedAt'],
-    );
-  }
 }

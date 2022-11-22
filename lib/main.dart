@@ -235,7 +235,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                             const Center(
                               child: Text(
-                                "Total Stats :\n",
+                                "Stats\n",
                                 style: TextStyle(
                                     color: Colors.black,
                                     fontSize: 12,
@@ -247,10 +247,10 @@ class _LoginScreenState extends State<LoginScreen> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceAround,
                                 children:<Widget> [
-                                  Bubble(Colors.blue[300]!, 0, "Emortions", Icons.emoji_emotions),
-                                  Bubble(Colors.green[400]!, 0, "Insights", Icons.question_answer),
-                                  Bubble(Colors.red[300]!, 0, "New Emorters", Icons.person),
-                                  Bubble(Colors.yellow[800]!, 0, "Friendships", Icons.people),
+                                  Bubble(Colors.blue[300]!, state.stats.emortionCount, "Emortions", Icons.emoji_emotions),
+                                  Bubble(Colors.green[400]!, state.stats.insightCount, "Insights", Icons.question_answer),
+                                  Bubble(Colors.red[300]!, state.stats.newUserCount, "New Emorters", Icons.person),
+                                  Bubble(Colors.yellow[800]!, state.stats.newRelationshipCount, "Friendships", Icons.people),
                                 ],
                               ),
                             ]), // column widget ends here
