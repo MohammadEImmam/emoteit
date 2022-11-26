@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:emoteit/cubits/emortion/emortion_cubit.dart';
 import 'package:emoteit/cubits/leaderboard/stats_cubit.dart';
 import 'package:emoteit/models/emoteit_user_model.dart';
@@ -9,8 +7,6 @@ import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'gen/assets.gen.dart';
 import 'package:flutter/cupertino.dart';
-
-import 'models/emortion_model.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key, required this.user}) : super(key: key);
@@ -162,8 +158,8 @@ class _HomePageState extends State<HomePage> {
                           child: CircularProgressIndicator(),);
                       } else if (state is ResponseEmortionState) {
                         return EmortionCard(
-                          // user: widget.user,
-                          emortion: state.emortion[index],
+                          goalNumber: index + 1,
+                          secret: state.emortion[index].secret,
                         );
                       } else if (state is ErrorEmortionState) {
                         return Center(child: Text(state.message),);
@@ -220,42 +216,18 @@ class _HomePageState extends State<HomePage> {
 
 
 class EmortionCard extends StatelessWidget {
-  final Emortion emortion;
-  // final EmoteItUser user;
+  final int goalNumber;
+  final String secret;
   const EmortionCard({
-    Key? key, required this.emortion,
-    // required this.emortion, required this.user,
+    Key? key,
+    required this.goalNumber, required this.secret,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final now = DateTime.now().toUtc();
-    final expirationDate = DateTime.parse(emortion.expiresAt);
-    final days = now.difference(DateTime.parse(emortion.createdAt)).inDays;
-    final hours = now.difference(DateTime.parse(emortion.createdAt)).inHours;
-    final mins = now.difference(DateTime.parse(emortion.createdAt)).inMinutes;
-    final secs = now.difference(DateTime.parse(emortion.createdAt)).inSeconds;
-    
-    final eDays = expirationDate.difference(now).inDays;
-    final eHours = expirationDate.difference(now).inHours;
-    final eMins = expirationDate.difference(now).inMinutes;
-    final eSecs = expirationDate.difference(now).inSeconds;
-    var self = "";
-    bool rev = true;
-    var expire = eDays > 0 ? "$eDays d left" : eHours > 0 ? "$eHours h left" : eMins > 0 ? "$eMins m left" : "$eSecs s left";
-    final ago = days > 0 ? "$days d ago" : hours > 0 ? "$hours h ago" : mins > 0 ? "$mins m ago" : "$secs secs ago";
-    if(now.isAfter(expirationDate)) {
-      expire = "Expired";
-    }
-    if(emortion.secret == ""){
-      rev = false;
-    }
-    // if(emortion.user.uid == user.uid){
-    //   self = "You";
-    // }
     return Container(
       width: 100,
-      height: 300,
+      // height: 100,
       padding: const EdgeInsets.all(25),
       margin: const EdgeInsets.symmetric(horizontal: 20),
       decoration: BoxDecoration(
@@ -270,120 +242,69 @@ class EmortionCard extends StatelessWidget {
           ),
         ],
       ),
-      child: Wrap(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              Container(
-                  width:60,
-                  height: 60,
-                decoration: BoxDecoration(
-                  border: Border.all(width: 2, color: Colors.black),
-                  borderRadius: BorderRadius.circular(100), //<-- SEE HERE
-                ),
-                child: CircleAvatar(
-                  radius: 48, // Image radius
-                  backgroundImage: NetworkImage("emortion.user.pictureUrl"),
-                )
-              ),
-              Column(
-                children: [
-                  Text("emortion.user.name",
-                    style: const TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w900,
-                    ),
-                  ),
-                  Text(self,
-                    style: const TextStyle(
-                      color: Colors.blue,
-                      fontSize: 12,
-                      fontWeight: FontWeight.w300,
-                    ),
-                  ),
-                ],
-              ),
-              Column(
-                children: [
-                    Text(" Category: ${emortion.categoryID}\n Posted: $ago \n Time Left: $expire", // Translate this!
-                    style: const TextStyle(
-                      color: Colors.blue,
-                      fontSize: 11,
-                      fontWeight: FontWeight.w500,
-                    ),
-                    )
-                ],
-            ),
-          ]
-        ),
-          Row(
-            // Need to figure out a better way to do line breaks
-            children: [
-              rev? const Text("\n \n") : const Text("\n"),
-            ],
+          const CircleAvatar(
+            radius: 30,
+            backgroundColor: Colors.grey,
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+          Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(rev?"Insight: ${emortion.secret??"ASS"}":"Insight: ________________", // Call the answering interface
-                style: const TextStyle(
-                  color: Colors.black54,
-                  fontSize: 17,
-                  fontWeight: FontWeight.w700,
+              Text(
+                'Goals #$goalNumber',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w500,
+                  fontFamily: GoogleFonts.workSans().fontFamily,
                 ),
               ),
-            ],
-          ),
-          Row(
-            // Need to figure out a better way to do line breaks
-            children: const [
-              Text("\n \n")
-            ],
-          ),
-          Row(
-            // Need to figure out a better way to do line breaks
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              rev?const Text(""):
-              Container(
-                height: 30,
-                width: 100,
-                decoration: const BoxDecoration(
-                    color: Colors.black,
-                    borderRadius: BorderRadius.all(
-                        Radius.circular(25))),
-                child: const Center(
-                  child: Text(
-                    "Answer",
+              const SizedBox(height: 10),
+              Row(
+                children: [
+                  Container(
+                    height: 5,
+                    width: 100,
+                    decoration: BoxDecoration(
+                      color: Colors.grey,
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    child: Row(
+                      children: [
+                        Container(
+                          height: 5,
+                          width: 20,
+                          decoration: BoxDecoration(
+                            color: Colors.black,
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Text(
+                    secret,
                     style: TextStyle(
-                        color: Colors.white, fontSize: 16),
+                      fontSize: 10,
+                      fontFamily: GoogleFonts.workSans().fontFamily,
+                    ),
                   ),
-                ),
+                ],
               ),
             ],
           ),
-          Row(
-            // Need to figure out a better way to do line breaks
+          Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: const [
-              Text("\n \n")
+              Icon(Icons.more_vert),
+              Icon(Icons.more_vert, color: Colors.transparent),
             ],
-          ),
-      Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: const [
-          Icon(
-            Icons.favorite,
-          ),
-          Icon(
-            Icons.emoji_emotions,
-          ),
-          Icon(
-            Icons.comment,
-          ),
+          )
         ],
       ),
-      ],),
     );
   }
 }
