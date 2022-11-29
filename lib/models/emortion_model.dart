@@ -9,7 +9,7 @@ class Emortion{
   final bool deprecated;
   final int categoryID;
   final int privacyID;
-  final List<String> reactionIDs;
+  final List<dynamic> reactionIDs;
   final List<String> insightUIDS;
   final String createdAt;
   final String updatedAt;

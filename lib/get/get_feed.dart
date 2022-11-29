@@ -22,8 +22,8 @@ class Feed {
           deprecated: e['deprecated'],
           categoryID: e['categoryId'],
           privacyID: e['privacyId'],
-          reactionIDs: List<String>.from(e['reactionIds']),
-          insightUIDS: List<String>.from(e['insightUIds']),
+          reactionIDs: List<dynamic>.from(e['reactionIds']),
+          insightUIDS: List<String>.from(e['insightUIds']??""),
           createdAt: e['createdAt'],
           updatedAt: e['updatedAt'],
         );
