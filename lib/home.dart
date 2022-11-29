@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:emoteit/cubits/emortion/emortion_cubit.dart';
 import 'package:emoteit/cubits/leaderboard/stats_cubit.dart';
 import 'package:emoteit/models/emoteit_user_model.dart';
@@ -8,10 +10,12 @@ import 'package:google_fonts/google_fonts.dart';
 import 'gen/assets.gen.dart';
 import 'package:flutter/cupertino.dart';
 
+import 'models/emortion_model.dart';
+
 class HomePage extends StatefulWidget {
   const HomePage({Key? key, required this.user}) : super(key: key);
 
-   final EmoteItUser user;
+  final EmoteItUser user;
   @override
   _HomePageState createState() => _HomePageState();
 }
@@ -31,231 +35,227 @@ class _HomePageState extends State<HomePage> {
     Size size = const Size(390, 844);
     return
       Scaffold(
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(
-                height: 39,
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          widget.user.name,
-                          style: TextStyle(
-                            fontSize: 28,
-                            fontWeight: FontWeight.w600,
-                            fontFamily: GoogleFonts.workSans().fontFamily,
-                          ),
-                        ),
-                        Row(
-                          children: [
-                            Text(
-                              "Score: ${widget.user.score.toString()}",
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontFamily: GoogleFonts.workSans().fontFamily,
-                              ),
-                            ),
-                            IconButton(
-                              onPressed: () {},
-                              icon: const Icon(CupertinoIcons.chevron_down),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        context.pop();
-                      },
-                      child:Container(
-                        width: 50,
-                        height: 50,
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: (Colors.black),
-                            //<-- SEE HERE
-                            width: 2,
-                          ),
-                          shape: BoxShape.circle,
-                          image: DecorationImage(
-                            image: NetworkImage(widget.user.pictureUrl),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
+        body: SafeArea(
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(
+                  height: 39,
                 ),
-              ),
-              const SizedBox(
-                height: 13,
-              ),
-              SizedBox(
-                height: 80,
-                width: size.width,
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const SizedBox(width: 20),
-                      ListView.separated(
-                        itemCount: 10,
-                        shrinkWrap: true,
-                        scrollDirection: Axis.horizontal,
-                        physics: const NeverScrollableScrollPhysics(),
-                        separatorBuilder: (context, index) {
-                          return const SizedBox(width: 10);
-                        },
-                        itemBuilder: (context, index) {
-                          return CircleAvatar(
-                            radius: 30,
-                            backgroundColor: Colors.grey,
-                            child: CircleAvatar(
-                              radius: 29,
-                              backgroundColor: Colors.white,
-                              child: Center(
-                                child: Text(
-                                  '${index + 20}',
-                                  style: const TextStyle(color: Colors.black),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            widget.user.name,
+                            style: TextStyle(
+                              fontSize: 28,
+                              fontWeight: FontWeight.w600,
+                              fontFamily: GoogleFonts.workSans().fontFamily,
+                            ),
+                          ),
+                          Row(
+                            children: [
+                              Text(
+                                "Score: ${widget.user.score.toString()}",
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontFamily: GoogleFonts.workSans().fontFamily,
                                 ),
                               ),
-                            ),
-                          );
-                        },
+                              IconButton(
+                                onPressed: () {},
+                                icon: const Icon(CupertinoIcons.chevron_down),
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
-                      const SizedBox(width: 20),
+                      GestureDetector(
+                        onTap: () {
+                          context.pop();
+                        },
+                        child:Container(
+                          width: 50,
+                          height: 50,
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: (Colors.black),
+                              //<-- SEE HERE
+                              width: 2,
+                            ),
+                            shape: BoxShape.circle,
+                            image: DecorationImage(
+                              image: NetworkImage(widget.user.pictureUrl),
+                            ),
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              const SizedBox(width: 20),
-              ListView.separated(
-                itemCount: 5,
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                separatorBuilder: (context, index) {
-                  return const SizedBox(height: 20);
-                },
-                itemBuilder: (context, index) {
-                  return
-                   BlocBuilder<EmortionCubit, EmortionState>(
-                    builder:(context,state) {
-                      if (state is EmortionInitial || state is LoadingEmortionState) {
-                        return const Center(
-                          child: CircularProgressIndicator(),);
-                      } else if (state is ResponseEmortionState) {
-                        return EmortionCard(
-<<<<<<< HEAD
-                          secret: state.emortion[index].secret,
-                          category: state.emortion[index].categoryID.toString(),//NEED TO TRANSLATE
-                          emojis: state.emortion[index].emojis,
-                          creator: state.emortion[index].user,
-                          expiresAt: state.emortion[index].expiresAt
-=======
-                          goalNumber: index + 1,
-                          secret: state.emortion[index].secret,
->>>>>>> parent of 778565f (home update)
-                        );
-                      } else if (state is ErrorEmortionState) {
-                        return Center(child: Text(state.message),);
-                      }
-                      return Center(child: Text(state.toString()));
-                    }
-                  );
-                },
-              ),
-              const SizedBox(width: 20),
-            ],
-          ),
-        ),
-      ),
-      bottomNavigationBar: Container(
-        height: 90,
-        decoration: BoxDecoration(color: Colors.white, border: Border.all(color: const Color(0xffE0E0E0))),
-        child: Center(
-          child: Padding(
-            padding: const EdgeInsets.only(left: 54, right: 54),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Assets.svg.m6.motionPhotosPause.svg(
-                  height: 24,
-                  width: 24,
-                  fit: BoxFit.fill,
+                const SizedBox(
+                  height: 13,
                 ),
-                Assets.svg.m6.castConnected.svg(
-                  height: 24,
-                  width: 24,
-                  fit: BoxFit.fill,
+                SizedBox(
+                  height: 80,
+                  width: size.width,
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const SizedBox(width: 20),
+                        ListView.separated(
+                          itemCount: 10,
+                          shrinkWrap: true,
+                          scrollDirection: Axis.horizontal,
+                          physics: const NeverScrollableScrollPhysics(),
+                          separatorBuilder: (context, index) {
+                            return const SizedBox(width: 10);
+                          },
+                          itemBuilder: (context, index) {
+                            return CircleAvatar(
+                              radius: 30,
+                              backgroundColor: Colors.grey,
+                              child: CircleAvatar(
+                                radius: 29,
+                                backgroundColor: Colors.white,
+                                child: Center(
+                                  child: Text(
+                                    '${index + 20}',
+                                    style: const TextStyle(color: Colors.black),
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                        const SizedBox(width: 20),
+                      ],
+                    ),
+                  ),
                 ),
-                Assets.svg.m6.debug.svg(
-                  height: 24,
-                  width: 24,
-                  fit: BoxFit.fill,
+                const SizedBox(
+                  height: 20,
                 ),
-                Assets.svg.m6.contact.svg(
-                  height: 24,
-                  width: 24,
-                  fit: BoxFit.fill,
+                const SizedBox(width: 20),
+                ListView.separated(
+                  itemCount: 5,
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  separatorBuilder: (context, index) {
+                    return const SizedBox(height: 20);
+                  },
+                  itemBuilder: (context, index) {
+                    return
+                      BlocBuilder<EmortionCubit, EmortionState>(
+                          builder:(context,state) {
+                            if (state is EmortionInitial || state is LoadingEmortionState) {
+                              return const Center(
+                                child: CircularProgressIndicator(),);
+                            } else if (state is ResponseEmortionState) {
+                              return EmortionCard(
+                                // user: widget.user,
+                                emortion: state.emortion[index],
+                              );
+                            } else if (state is ErrorEmortionState) {
+                              return Center(child: Text(state.message),);
+                            }
+                            return Center(child: Text(state.toString()));
+                          }
+                      );
+                  },
                 ),
+                const SizedBox(width: 20),
               ],
             ),
           ),
         ),
-      ),
-    );
+        bottomNavigationBar: Container(
+          height: 90,
+          decoration: BoxDecoration(color: Colors.white, border: Border.all(color: const Color(0xffE0E0E0))),
+          child: Center(
+            child: Padding(
+              padding: const EdgeInsets.only(left: 54, right: 54),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Assets.svg.m6.motionPhotosPause.svg(
+                    height: 24,
+                    width: 24,
+                    fit: BoxFit.fill,
+                  ),
+                  Assets.svg.m6.castConnected.svg(
+                    height: 24,
+                    width: 24,
+                    fit: BoxFit.fill,
+                  ),
+                  Assets.svg.m6.debug.svg(
+                    height: 24,
+                    width: 24,
+                    fit: BoxFit.fill,
+                  ),
+                  Assets.svg.m6.contact.svg(
+                    height: 24,
+                    width: 24,
+                    fit: BoxFit.fill,
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
   }
 }
 
 
 
 class EmortionCard extends StatelessWidget {
-<<<<<<< HEAD
-  final String secret;
-  final String category;
-  final List<String> emojis;
-  final EmoteItUser creator;
-  final String expiresAt;
+  final Emortion emortion;
+  // final EmoteItUser user;
   const EmortionCard({
-    Key? key,
-    required this.secret, required this.category, required this.emojis, required this.creator, required this.expiresAt,
-=======
-  final int goalNumber;
-  final String secret;
-  const EmortionCard({
-    Key? key,
-    required this.goalNumber, required this.secret,
->>>>>>> parent of 778565f (home update)
+    Key? key, required this.emortion,
+    // required this.emortion, required this.user,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-<<<<<<< HEAD
-    bool isExpired = false;
     final now = DateTime.now().toUtc();
-    final expirationDate = DateTime.parse(expiresAt);
-    if(expirationDate.isAfter(now)){
-      isExpired = true;
+    final expirationDate = DateTime.parse(emortion.expiresAt);
+    final days = now.difference(DateTime.parse(emortion.createdAt)).inDays;
+    final hours = now.difference(DateTime.parse(emortion.createdAt)).inHours;
+    final mins = now.difference(DateTime.parse(emortion.createdAt)).inMinutes;
+    final secs = now.difference(DateTime.parse(emortion.createdAt)).inSeconds;
+
+    final eDays = expirationDate.difference(now).inDays;
+    final eHours = expirationDate.difference(now).inHours;
+    final eMins = expirationDate.difference(now).inMinutes;
+    final eSecs = expirationDate.difference(now).inSeconds;
+    var self = "";
+    bool rev = true;
+    var expire = eDays > 0 ? "$eDays d left" : eHours > 0 ? "$eHours h left" : eMins > 0 ? "$eMins m left" : "$eSecs s left";
+    final ago = days > 0 ? "$days d ago" : hours > 0 ? "$hours h ago" : mins > 0 ? "$mins m ago" : "$secs secs ago";
+    if(now.isAfter(expirationDate)) {
+      expire = "Expired";
     }
-=======
->>>>>>> parent of 778565f (home update)
+    if(emortion.secret == ""){
+      rev = false;
+    }
+    // if(emortion.user.uid == user.uid){
+    //   self = "You";
+    // }
     return Container(
       width: 100,
-      // height: 100,
+      height: 300,
       padding: const EdgeInsets.all(25),
       margin: const EdgeInsets.symmetric(horizontal: 20),
       decoration: BoxDecoration(
@@ -270,89 +270,120 @@ class EmortionCard extends StatelessWidget {
           ),
         ],
       ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      child: Wrap(
         children: [
-<<<<<<< HEAD
-           CircleAvatar(
-            backgroundImage: NetworkImage(creator.pictureUrl),
-=======
-          const CircleAvatar(
->>>>>>> parent of 778565f (home update)
-            radius: 30,
-            backgroundColor: Colors.grey,
+          Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Container(
+                    width:60,
+                    height: 60,
+                    decoration: BoxDecoration(
+                      border: Border.all(width: 2, color: Colors.black),
+                      borderRadius: BorderRadius.circular(100), //<-- SEE HERE
+                    ),
+                    child: CircleAvatar(
+                      radius: 48, // Image radius
+                      backgroundImage: NetworkImage(emortion.user.pictureUrl),
+                    )
+                ),
+                Column(
+                  children: [
+                    Text(emortion.user.name,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w900,
+                      ),
+                    ),
+                    Text(self,
+                      style: const TextStyle(
+                        color: Colors.blue,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w300,
+                      ),
+                    ),
+                  ],
+                ),
+                Column(
+                  children: [
+                    Text(" Category: ${emortion.categoryID}\n Posted: $ago \n Time Left: $expire", // Translate this!
+                      style: const TextStyle(
+                        color: Colors.blue,
+                        fontSize: 11,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    )
+                  ],
+                ),
+              ]
           ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            crossAxisAlignment: CrossAxisAlignment.start,
+          Row(
+            // Need to figure out a better way to do line breaks
             children: [
-              Text(
-<<<<<<< HEAD
-                creator.name,
-                style: TextStyle(
-                  fontSize: 15,
-=======
-                'Goals #$goalNumber',
-                style: TextStyle(
-                  fontSize: 20,
->>>>>>> parent of 778565f (home update)
-                  fontWeight: FontWeight.w500,
-                  fontFamily: GoogleFonts.workSans().fontFamily,
+              rev? const Text("\n \n") : const Text("\n"),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(rev?"Insight: ${emortion.secret??"ASS"}":"Insight: ________________", // Call the answering interface
+                style: const TextStyle(
+                  color: Colors.black54,
+                  fontSize: 17,
+                  fontWeight: FontWeight.w700,
                 ),
               ),
-              const SizedBox(height: 10),
-              Row(
-                children: [
-<<<<<<< HEAD
-                  Row(
-
-                  ),
-                  const SizedBox(width: 10),
-                  Text(
-                    isExpired ? 'Active' : 'Expired',
-=======
-                  Container(
-                    height: 5,
-                    width: 100,
-                    decoration: BoxDecoration(
-                      color: Colors.grey,
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                    child: Row(
-                      children: [
-                        Container(
-                          height: 5,
-                          width: 20,
-                          decoration: BoxDecoration(
-                            color: Colors.black,
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  Text(
-                    secret,
->>>>>>> parent of 778565f (home update)
+            ],
+          ),
+          Row(
+            // Need to figure out a better way to do line breaks
+            children: const [
+              Text("\n \n")
+            ],
+          ),
+          Row(
+            // Need to figure out a better way to do line breaks
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              rev?const Text(""):
+              Container(
+                height: 30,
+                width: 100,
+                decoration: const BoxDecoration(
+                    color: Colors.black,
+                    borderRadius: BorderRadius.all(
+                        Radius.circular(25))),
+                child: const Center(
+                  child: Text(
+                    "Answer",
                     style: TextStyle(
-                      fontSize: 10,
-                      fontFamily: GoogleFonts.workSans().fontFamily,
-                    ),
+                        color: Colors.white, fontSize: 16),
                   ),
-                ],
+                ),
               ),
             ],
           ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          Row(
+            // Need to figure out a better way to do line breaks
             children: const [
-              Icon(Icons.more_vert),
-              Icon(Icons.more_vert, color: Colors.transparent),
+              Text("\n \n")
             ],
-          )
-        ],
-      ),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: const [
+              Icon(
+                Icons.favorite,
+              ),
+              Icon(
+                Icons.emoji_emotions,
+              ),
+              Icon(
+                Icons.comment,
+              ),
+            ],
+          ),
+        ],),
     );
   }
 }
