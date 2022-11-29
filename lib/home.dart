@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:emoteit/cubits/emortion/emortion_cubit.dart';
 import 'package:emoteit/cubits/leaderboard/stats_cubit.dart';
 import 'package:emoteit/models/emoteit_user_model.dart';
@@ -160,11 +158,16 @@ class _HomePageState extends State<HomePage> {
                           child: CircularProgressIndicator(),);
                       } else if (state is ResponseEmortionState) {
                         return EmortionCard(
+<<<<<<< HEAD
                           secret: state.emortion[index].secret,
                           category: state.emortion[index].categoryID.toString(),//NEED TO TRANSLATE
                           emojis: state.emortion[index].emojis,
                           creator: state.emortion[index].user,
                           expiresAt: state.emortion[index].expiresAt
+=======
+                          goalNumber: index + 1,
+                          secret: state.emortion[index].secret,
+>>>>>>> parent of 778565f (home update)
                         );
                       } else if (state is ErrorEmortionState) {
                         return Center(child: Text(state.message),);
@@ -221,6 +224,7 @@ class _HomePageState extends State<HomePage> {
 
 
 class EmortionCard extends StatelessWidget {
+<<<<<<< HEAD
   final String secret;
   final String category;
   final List<String> emojis;
@@ -229,16 +233,26 @@ class EmortionCard extends StatelessWidget {
   const EmortionCard({
     Key? key,
     required this.secret, required this.category, required this.emojis, required this.creator, required this.expiresAt,
+=======
+  final int goalNumber;
+  final String secret;
+  const EmortionCard({
+    Key? key,
+    required this.goalNumber, required this.secret,
+>>>>>>> parent of 778565f (home update)
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+<<<<<<< HEAD
     bool isExpired = false;
     final now = DateTime.now().toUtc();
     final expirationDate = DateTime.parse(expiresAt);
     if(expirationDate.isAfter(now)){
       isExpired = true;
     }
+=======
+>>>>>>> parent of 778565f (home update)
     return Container(
       width: 100,
       // height: 100,
@@ -259,8 +273,12 @@ class EmortionCard extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
+<<<<<<< HEAD
            CircleAvatar(
             backgroundImage: NetworkImage(creator.pictureUrl),
+=======
+          const CircleAvatar(
+>>>>>>> parent of 778565f (home update)
             radius: 30,
             backgroundColor: Colors.grey,
           ),
@@ -269,9 +287,15 @@ class EmortionCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
+<<<<<<< HEAD
                 creator.name,
                 style: TextStyle(
                   fontSize: 15,
+=======
+                'Goals #$goalNumber',
+                style: TextStyle(
+                  fontSize: 20,
+>>>>>>> parent of 778565f (home update)
                   fontWeight: FontWeight.w500,
                   fontFamily: GoogleFonts.workSans().fontFamily,
                 ),
@@ -279,12 +303,38 @@ class EmortionCard extends StatelessWidget {
               const SizedBox(height: 10),
               Row(
                 children: [
+<<<<<<< HEAD
                   Row(
 
                   ),
                   const SizedBox(width: 10),
                   Text(
                     isExpired ? 'Active' : 'Expired',
+=======
+                  Container(
+                    height: 5,
+                    width: 100,
+                    decoration: BoxDecoration(
+                      color: Colors.grey,
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    child: Row(
+                      children: [
+                        Container(
+                          height: 5,
+                          width: 20,
+                          decoration: BoxDecoration(
+                            color: Colors.black,
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Text(
+                    secret,
+>>>>>>> parent of 778565f (home update)
                     style: TextStyle(
                       fontSize: 10,
                       fontFamily: GoogleFonts.workSans().fontFamily,
