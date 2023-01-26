@@ -1,16 +1,15 @@
-import 'dart:math';
-
 import 'package:emoteit/cubits/emortion/emortion_cubit.dart';
-import 'package:emoteit/cubits/leaderboard/stats_cubit.dart';
 import 'package:emoteit/models/emoteit_user_model.dart';
+import 'package:emoteit/widgets/global/answering_interface.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'gen/assets.gen.dart';
 import 'package:flutter/cupertino.dart';
-
+import 'get/emoji_controller.dart';
 import 'models/emortion_model.dart';
+import 'package:flutter_emoji/flutter_emoji.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key, required this.user}) : super(key: key);
@@ -26,7 +25,6 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       final cubit = context.read<EmortionCubit>();
-      print("Fetching emortion");
       cubit.fetchEmortion();
     });
   }
@@ -73,6 +71,18 @@ class _HomePageState extends State<HomePage> {
                                 onPressed: () {},
                                 icon: const Icon(CupertinoIcons.chevron_down),
                               ),
+                              TextButton(
+                                style: ButtonStyle(
+                                  foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
+                                  backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
+                                ),
+                                onPressed: () {
+                                  final cubit = context.read<EmortionCubit>();
+                                  cubit.fetchEmortion();
+                                  reassemble();
+                                },
+                                child: const Text('Refresh'),
+                              )
                             ],
                           ),
                         ],
@@ -229,6 +239,7 @@ class EmortionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Weird coding style here maybe change this
     final now = DateTime.now().toUtc();
     final expirationDate = DateTime.parse(emortion.expiresAt);
     final days = now.difference(DateTime.parse(emortion.createdAt)).inDays;
@@ -250,9 +261,8 @@ class EmortionCard extends StatelessWidget {
     if(emortion.secret == ""){
       rev = false;
     }
-    // if(emortion.user.uid == user.uid){
-    //   self = "You";
-    // }
+    EmojiController emojiParser = EmojiController();
+    final displayEmoji = emojiParser.parseEmoji(emortion.emojis);
     return Container(
       width: 100,
       height: 300,
@@ -326,41 +336,61 @@ class EmortionCard extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(rev?"Insight: ${emortion.secret??"ASS"}":"Insight: ________________", // Call the answering interface
-                style: const TextStyle(
-                  color: Colors.black54,
-                  fontSize: 17,
-                  fontWeight: FontWeight.w700,
-                ),
+              // Row
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(displayEmoji,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w900,
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
           Row(
             // Need to figure out a better way to do line breaks
-            children: const [
-              Text("\n \n")
+            children: [
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(rev?"Insight: ${emortion.secret}":"Insight: ________________",
+                    style: const TextStyle(
+                      color: Colors.black54,
+                      fontSize: 17,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ],
+              ),
+              const Text("\n")
             ],
           ),
           Row(
             // Need to figure out a better way to do line breaks
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              //show empty widget
               rev?const Text(""):
-              Container(
-                height: 30,
-                width: 100,
-                decoration: const BoxDecoration(
-                    color: Colors.black,
-                    borderRadius: BorderRadius.all(
-                        Radius.circular(25))),
-                child: const Center(
-                  child: Text(
-                    "Answer",
-                    style: TextStyle(
-                        color: Colors.white, fontSize: 16),
-                  ),
+              TextButton(
+                style: ButtonStyle(
+                  foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
+                  backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
                 ),
-              ),
+                onPressed: () {
+                  // Call the answering interface here
+                  var secret = context.read<EmortionCubit>().startEmortionInsight(emortion.id);
+                  var interface = AnsweringInterface(emortion, displayEmoji);
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) => interface.build(context),
+                  );
+                },
+                // Add a are you sure here?
+                child: const Text('Answer'),
+              )
+
             ],
           ),
           Row(
